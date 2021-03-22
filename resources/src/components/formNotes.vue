@@ -21,20 +21,7 @@
 	
 	export default {
 		name: 'formNotes',
-		props: {
-			propSaveNote : {
-				type: Function
-			},
-			propUpdateNote : {
-				type: Function
-			},
-			propRemoveNote : {
-				type: Function
-			},
-			propDataForm : {
-				type: Object
-			}
-		},
+		props: {},
 		data: function () {
 			return {
 				id: 0,
@@ -45,28 +32,39 @@
 		},
 		methods: {
 			submitSave(){
-				this.propSaveNote(this.title, this.description);
+					let data = {
+						title: this.title,
+						description: this.description,
+					}
+					this.$root.$emit('emitSaveNote', data);
 			},
 			submitUpdate(){
-				this.propUpdateNote(this.id, this.title, this.description);
-			},
+					let data = {
+						id: this.id,
+						title: this.title,
+						description: this.description,
+					}
+
+					this.$root.$emit('emitUpdateNote', data);
+				},
 			submitRemove(){
-				this.propRemoveNote(this.id);
+				let data = {id : this.id}
+				this.$root.$emit('emitRemoveNote', data);
 				this.resetInput();
 			},
 			resetInput(){
-				this.id= 0;
-				this.title= '';
-				this.description= ''; 
+				this.id = 0;
+				this.title = '';
+				this.description = ''; 
 			}
 		},
-		watch: {
-			propDataForm: function(note){
-				this.id = note.id;
-				this.title = note.title;
-				this.description = note.description;
-				this.mode = note.mode;
-			}
+		mounted(){
+			this.$root.$on('emitForm', data => {
+				this.id = data.id;
+				this.title = data.title;
+				this.description = data.description;
+				this.mode = data.mode;
+			})
 		}
 	}
 </script>
@@ -103,5 +101,35 @@
 }
 .loader{
 	vertical-align: middle;
+     background: #f7f7f7;
+     padding:10px 25px;
+     margin-bottom: 25px;
+     text-align: right;
+     border-bottom: 1px solid #e8e6e6;
+}
+.btn-delete{ margin-right:10px; }
+.content{
+     padding: 0px 25px;
+}
+.text{
+     display: block;
+     width: 100%;
+     padding: 0px;
+     font-size: 20px;
+     font-weight: bold;
+     color: #2c3e50;
+     border: none;
+     margin-bottom: 10px;
+     box-sizing: border-box;
+     outline: none;
+}
+.textarea{
+     min-height: 350px;
+     font-size: 15px;
+     font-weight: lighter;
+     line-height: 30px;
+}
+.loader{
+     vertical-align: middle;
 }
 </style>
