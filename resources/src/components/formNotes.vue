@@ -40,22 +40,29 @@
 
 					axios.post('http://localhost/aff-notes/note/create', params).then(response =>{
 					let data = {
-						id: response.data.id,
-						title: this.title,
-						description: this.description,
+						id : response.data.id,
+						title : this.title,
+						description : this.description
 					}
 					this.$root.$emit('emitSaveNote', data);
 					});
 
-			},
+				},
 			submitUpdate(){
-					let data = {
-						id: this.id,
-						title: this.title,
-						description: this.description,
-					}
 
+					let params = new URLSearchParams();
+					params.append('id', this.id);
+					params.append('title', this.title);
+					params.append('description', this.description);
+
+					axios.post('http://localhost/aff-notes/note/update', params).then(response =>{
+					let data = {
+						id : response.data.id,
+						title : this.title,
+						description : this.description
+					}
 					this.$root.$emit('emitUpdateNote', data);
+					});
 				},
 			submitRemove(){
 				let data = {id : this.id}
