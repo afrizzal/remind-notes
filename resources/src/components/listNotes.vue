@@ -22,31 +22,25 @@
 				notes : []
 				}
 			},
-			props: {
-				propEditNote : {
-					type: Function
-				}
-			},
 			methods : {
 				editNote(id){
 					let dataForm = this.notes.find(note => note.id === id);
 					dataForm.mode = 'update';
 					this.$root.$emit('emitForm', dataForm);
 				},
-				createNewId(){
-					let newId = 0;
-					if(this.notes.length === 0){
-					newId = 1;
-						}else{
-					newId = this.notes [this.notes.length - 1].id +1;
-						}
-						return newId;
-					},
-					getData(){
-						axios.get('http://localhost/aff-notes/note').then(response =>{
-							console.log(response);
-							this.notes = response.data;
-						})
+				// createNewId(){
+				// 	let newId = 0;
+				// 	if(this.notes.length === 0){
+				// 	newId = 1;
+				// 		}else{
+				// 	newId = this.notes [this.notes.length - 1].id +1;
+				// 		}
+				// 		return newId;
+				// 	},
+				getData(){
+					axios.get('http://localhost/aff-notes/note').then(response =>{
+						this.notes = response.data;
+					});
 					}
 				},
 			mounted (){
@@ -62,10 +56,9 @@
 
 				});	
 					this.$root.$on('emitSaveNote', data => {
-				let newId = this.createNewId();
-				let newNote = { id:newId, 'title' : data.title, 'description' : data.description}
-					this.notes.push(newNote);
-					this.editNote(newId);
+						let newNote = { id:data.id, 'title' : data.title, 'description' : data.description}
+					this.notes.unshift(newNote);
+					this.editNote(data.id);
 				});
 			}
 		}
